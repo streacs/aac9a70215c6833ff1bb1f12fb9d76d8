@@ -1,6 +1,9 @@
 provider "aws" {
   profile  = "terraformWS"
   region   = "eu-central-1"
+  default_tags {
+    tags = var.my_default_tags
+  }
 }
 
 resource "aws_instance" "webserver" {
@@ -49,5 +52,13 @@ locals {
     Project = "Paint elephants pink"
     Owner = "Oliver Wolf"
     Kostenstelle = "42"
+  }
+}
+
+variable "my_default_tags" {
+  type = map(string)
+  description = "Definition for default tags for resources"
+  default = {
+    automated_through = "Terraform"
   }
 }
