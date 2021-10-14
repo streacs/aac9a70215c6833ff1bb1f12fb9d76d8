@@ -7,7 +7,7 @@ provider "aws" {
 }
 
 resource "aws_instance" "webserver" {
-  count = 3
+  count = var.instance_count
 
   ami           = data.aws_ami.amazon-linux-2.id
   instance_type = var.instance_type
@@ -42,6 +42,12 @@ variable "instance_type" {
   type = string
   description = "Instance type for the web server."
   default = "t2.nano"
+}
+
+variable "instance_count" {
+  //type = number
+  description = "Instance count for the web server."
+  default = 3
 }
 
 output "public_ip" {
