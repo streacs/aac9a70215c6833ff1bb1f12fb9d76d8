@@ -7,7 +7,7 @@ provider "aws" {
 }
 
 resource "aws_instance" "webserver" {
-  ami           = "ami-0cd855c8009cb26ef"
+  ami           = data.aws_ami.amazon-linux-2.id
   instance_type = var.instance_type
 
   vpc_security_group_ids = [aws_security_group.web.id]
@@ -60,5 +60,14 @@ variable "my_default_tags" {
   description = "Definition for default tags for resources"
   default = {
     automated_through = "Terraform"
+  }
+}
+
+data "aws_ami" "amazon-linux-2" {
+  most_recent = true
+  owners = ["amazon"]
+  filter {
+    name = "name"
+    values = ["amzn2-ami-hvm-2.0.*-x86_64-gp2"]
   }
 }
