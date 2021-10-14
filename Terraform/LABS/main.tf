@@ -18,6 +18,8 @@ resource "aws_instance" "webserver" {
   ami           = data.aws_ami.amazon-linux-2.id
   instance_type = var.instance_type
 
+  subnet_id = module.vpc.public_subnets[0]
+
   vpc_security_group_ids = [aws_security_group.web.id]
 
   user_data = templatefile("user_data.sh", {username = "Picard"})
@@ -28,6 +30,9 @@ resource "aws_instance" "webserver" {
 resource "aws_security_group" "web" {
   name_prefix = "web-access"
   description = "Allow access to the server from the web"
+
+  vpc_id = module.vpc.vpc_id
+
   ingress {
     from_port = 80
     to_port = 80
