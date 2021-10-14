@@ -7,6 +7,8 @@ provider "aws" {
 }
 
 resource "aws_instance" "webserver" {
+  count = 3
+
   ami           = data.aws_ami.amazon-linux-2.id
   instance_type = var.instance_type
 
@@ -44,7 +46,7 @@ variable "instance_type" {
 
 output "public_ip" {
   description = "Public IP Address"
-  value = aws_instance.webserver.public_ip
+  value = aws_instance.webserver.*.public_ip
 }
 
 locals {
