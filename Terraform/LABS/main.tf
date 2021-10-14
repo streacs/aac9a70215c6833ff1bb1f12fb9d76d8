@@ -11,9 +11,8 @@ resource "aws_instance" "webserver" {
 
   user_data = templatefile("user_data.sh", {username = "Picard"})
 
-  tags = {
-    Name = "Oliver's Webserver"
-  }
+  tags = merge(local.tags, tomap({ Name = "Oliver's Webserver" }))
+
 }
 
 resource "aws_security_group" "web" {
@@ -31,9 +30,7 @@ resource "aws_security_group" "web" {
     protocol = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-  tags = {
-    Name = "web-access"
-  }
+  tags = merge(local.tags, tomap({ Name = "Oliver's Webserver" }))
 }
 
 variable "instance_type" {
@@ -51,5 +48,6 @@ locals {
   tags = {
     Project = "Paint elephants pink"
     Owner = "Oliver Wolf"
+    Kostenstelle = "42"
   }
 }
