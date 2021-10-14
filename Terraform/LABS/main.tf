@@ -1,11 +1,3 @@
-provider "aws" {
-  profile  = "terraformWS"
-  region   = "eu-central-1"
-  default_tags {
-    tags = var.my_default_tags
-  }
-}
-
 resource "aws_instance" "webserver" {
   count = var.instance_count
 
@@ -17,7 +9,6 @@ resource "aws_instance" "webserver" {
   user_data = templatefile("user_data.sh", {username = "Picard"})
 
   tags = merge(local.tags, tomap({ Name = "Oliver's Webserver" }))
-
 }
 
 resource "aws_security_group" "web" {
@@ -36,46 +27,4 @@ resource "aws_security_group" "web" {
     cidr_blocks = ["0.0.0.0/0"]
   }
   tags = merge(local.tags, tomap({ Name = "Oliver's Webserver" }))
-}
-
-variable "instance_type" {
-  type = string
-  description = "Instance type for the web server."
-  default = "t2.nano"
-}
-
-variable "instance_count" {
-  //type = number
-  description = "Instance count for the web server."
-  default = 3
-}
-
-output "public_ip" {
-  description = "Public IP Address"
-  value = aws_instance.webserver.*.public_ip
-}
-
-locals {
-  tags = {
-    Project = "Paint elephants pink"
-    Owner = "Oliver Wolf"
-    Kostenstelle = "42"
-  }
-}
-
-variable "my_default_tags" {
-  type = map(string)
-  description = "Definition for default tags for resources"
-  default = {
-    automated_through = "Terraform"
-  }
-}
-
-data "aws_ami" "amazon-linux-2" {
-  most_recent = true
-  owners = ["amazon"]
-  filter {
-    name = "name"
-    values = ["amzn2-ami-hvm-2.0.*-x86_64-gp2"]
-  }
 }
