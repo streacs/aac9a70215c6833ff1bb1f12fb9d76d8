@@ -20,3 +20,13 @@ module "test-webserver" {
 
   instance_type = var.instance_type
 }
+
+terraform {
+  backend "s3" {
+    profile = "terraformWS"
+    bucket = "qwiklabs-tfstate-938a1360-2cc2-11ec-af75-0291281952d8"
+    dynamodb_table = "qwiklabs-tfstate-lock"
+    key = "terraform.tfstate"
+    region = "eu-central-1"
+  }
+}
