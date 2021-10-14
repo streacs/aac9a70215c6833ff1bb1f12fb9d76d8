@@ -46,3 +46,10 @@ output "public_ip" {
   description = "Public IP Address"
   value = aws_instance.webserver.public_ip
 }
+
+locals {
+  tags = {
+    Project = "Paint elephants pink"
+    Owner = "Oliver Wolf"
+  }
+}
